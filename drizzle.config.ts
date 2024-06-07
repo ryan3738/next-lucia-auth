@@ -4,9 +4,9 @@ import { DATABASE_PREFIX } from "@/lib/constants";
 export default defineConfig({
   schema: "./src/server/db/schema.ts",
   out: "./drizzle",
-  driver: "pg",
+  dialect: 'postgresql',
   dbCredentials: {
-    connectionString: process.env.POSTGRES_URL!,
+    url: process.env.POSTGRES_URL!,
   },
   tablesFilter: [`${DATABASE_PREFIX}_*`],
 });

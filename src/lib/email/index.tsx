@@ -1,10 +1,10 @@
 import "server-only";
-
 import { EmailVerificationTemplate } from "./templates/email-verification";
 import { ResetPasswordTemplate } from "./templates/reset-password";
 import { render } from "@react-email/render";
 import { env } from "@/env";
 import { EMAIL_SENDER } from "@/lib/constants";
+import { Resend } from 'resend';
 import { createTransport, type TransportOptions } from "nodemailer";
 import type { ComponentProps } from "react";
 
@@ -39,16 +39,19 @@ const getEmailTemplate = <T extends EmailTemplate>(template: T, props: PropsMap[
   }
 };
 
-const smtpConfig = {
-  host: env.SMTP_HOST,
-  port: env.SMTP_PORT,
-  auth: {
-    user: env.SMTP_USER,
-    pass: env.SMTP_PASSWORD,
-  },
-};
+// const smtpConfig = {
+//   host: env.SMTP_HOST,
+//   port: env.SMTP_PORT,
+//   secure: true,
+//   auth: {
+//     user: env.SMTP_USER,
+//     pass: env.SMTP_PASSWORD,
+//   },
+// };
 
-const transporter = createTransport(smtpConfig as TransportOptions);
+// const transporter = createTransport(smtpConfig as TransportOptions);
+
+const resend = new Resend(env.RESEND_API_KEY);
 
 export const sendMail = async <T extends EmailTemplate>(
   to: string,
@@ -62,5 +65,5 @@ export const sendMail = async <T extends EmailTemplate>(
 
   const { subject, body } = getEmailTemplate(template, props);
 
-  return transporter.sendMail({ from: EMAIL_SENDER, to, subject, html: body });
+  return resend.emails.send({ from: EMAIL_SENDER, to, subject, html: body });
 };
