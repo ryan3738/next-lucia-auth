@@ -7,11 +7,11 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
-    DATABASE_URL: z
+    POSTGRES_URL: z
       .string()
       .url()
       .refine(
-        (str) => !str.includes("YOUR_DATABASE_URL_HERE"),
+        (str) => !str.includes("YOUR_POSTGRES_URL_HERE"),
         "You forgot to change the default URL",
       ),
     NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
@@ -42,7 +42,7 @@ export const env = createEnv({
    */
   runtimeEnv: {
     // Server-side env vars
-    DATABASE_URL: process.env.DATABASE_URL,
+    POSTGRES_URL: process.env.POSTGRES_URL,
     NODE_ENV: process.env.NODE_ENV,
     SMTP_HOST: process.env.SMTP_HOST,
     SMTP_PORT: parseInt(process.env.SMTP_PORT ?? ""),
